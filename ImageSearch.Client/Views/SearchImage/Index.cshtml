@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Search image";
+}
+<div ng-cloak ng-controller="serarchImageController as searchImageCtrl" ng-init="initialize()">
+    <div class="col-md-9 list-images">
+
+        <div class="input-group">
+            <input type="text" ng-model="searchText" class="form-control">
+            <span class="input-group-btn">
+                <button class="btn btn-default" ng-click="search()" type="button">Search</button>
+            </span>
+        </div>
+
+        <div class="list-images">
+            <div class="item photo" ng-repeat="image in imageList">
+                <div class="show-image">
+                    <img check-image class="img-rounded" onerror="imgError(this)" ng-src="{{image.link}}"/>
+                    <div ng-click="remove(image)" class="delete pointer">X</div>
+                    <div class="load pointer" ng-click="downloadImage(image.link)">Download</div>
+                    <div class="hover">
+                        <a class="img-text" ng-click="downloadImage(image.link, image.title)">{{image.title}}</a>
+                        <div class="tooltip">{{image.title}}</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div ng-show="imageList.length && !isFilter" ng-click="showMore()" id="show-more">
+            <a href="">Show more</a>
+        </div>
+    </div>
+
+    <div class="col-md-3 filters">
+        <div ng-hide="isFilter" class="input-group">
+            <button class="btn btn-default" ng-click="saveFilter()" type="button">Save Search Result</button>
+        </div>
+        <h4>Previous result:</h4>
+        <div class="loader-container">
+            <div loader working="preloader"></div>
+            <ul ng-repeat="filter in filterList">
+                <li><a ng-click="loadFilter(filter.id)" href="">Search #{{filter.id}}</a>, {{filter.imageCount}} image(s) saved
+                    (<a ng-click="removeFilter(filter.id)" href="">remove</a>)</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
