@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using AutoMapper;
 using Google.Apis.Customsearch.v1;
 using ImageSearch.WebApi.DataModel;
@@ -66,11 +67,12 @@ namespace ImageSearch.WebApi.Services
 
         public List<Image> SearchImageByQuery(string keyword, int startFrom)
         {
+            var uncodedKeyword = HttpContext.Current.Server.UrlDecode(keyword);
             var initializer = new Google.Apis.Services.BaseClientService.Initializer { ApiKey = apiKey };
             var customSearchService = new CustomsearchService(initializer);
             var listImage = new List<Image>();
 
-            var listRequest = customSearchService.Cse.List(keyword);
+            var listRequest = customSearchService.Cse.List(uncodedKeyword);
             listRequest.Cx = searchEngineId;
             listRequest.Start = startFrom;
             listRequest.Num = 10;
